@@ -14,15 +14,19 @@ class ListaPage extends StatefulWidget {
 class _ListaPageState extends State<ListaPage> {
   final controller = getIt.get<NoticiaController>();
 
-  void retonrnaLista() async {
-    lista = await controller.buscarNoticias();
+  void retornaLista() async {
+    final noticias = await controller.buscarNoticias();
+    setState(() {
+      lista = noticias;
+    });
   }
 
   List<Noticia> lista = [];
 
   @override
   void initState() {
-    retonrnaLista();
+    super.initState();
+    retornaLista();
   }
 
   @override
@@ -34,7 +38,7 @@ class _ListaPageState extends State<ListaPage> {
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: lista.length,
+                itemCount: 10,
                 itemBuilder: (context, index) => Column(children: [NoticiaCard(noticia: lista[index])]),
               ),
             ),

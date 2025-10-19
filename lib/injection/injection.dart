@@ -4,7 +4,7 @@ import 'package:ap2/controller/noticia_controller.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
-const search = 'Brazil';
+const search = 'bitcoin';
 
 const baseUrl = 'https://newsapi.org/v2/everything?q=$search&apiKey=$apiKey';
 
