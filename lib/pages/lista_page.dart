@@ -12,6 +12,8 @@ class ListaPage extends StatefulWidget {
 }
 
 class _ListaPageState extends State<ListaPage> {
+  bool pesquisando = false;
+
   final controller = getIt.get<NoticiaController>();
 
   void retornaLista() async {
@@ -32,13 +34,27 @@ class _ListaPageState extends State<ListaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Notícias !!!!!')),
+      appBar: pesquisando
+          ? AppBar(leading: Text('Barra de pesquisa'), actions: [IconButton(onPressed: () {
+            setState(() {
+              pesquisando = false;
+            });
+          }, icon: Icon(Icons.close))],)
+          : AppBar(
+              title: Text('Notícias !!!!!'),
+              actions: [IconButton(onPressed: () {
+                setState(() {
+                  pesquisando = true;
+                });
+              }, icon: Icon(Icons.search))],
+            ),
       body: SafeArea(
         child: Column(
           children: [
+            pesquisando ? Text('teste') :
             Expanded(
               child: ListView.builder(
-                itemCount: 10,
+                itemCount: lista.length,
                 itemBuilder: (context, index) => Column(children: [NoticiaCard(noticia: lista[index])]),
               ),
             ),
