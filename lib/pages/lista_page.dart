@@ -8,7 +8,6 @@ import '../api/api.dart';
 
 class ListaPage extends StatefulWidget {
   const ListaPage({super.key});
-  final corpo = true;
 
   @override
   State<ListaPage> createState() => _ListaPageState();
@@ -16,20 +15,48 @@ class ListaPage extends StatefulWidget {
 
 class _ListaPageState extends State<ListaPage> {
   bool pesquisando = false;
+  bool mostrandoNoticiasEmAlta = true;
+
   final TextEditingController _searchController = TextEditingController();
 
   final controller = getIt.get<NoticiaController>();
+
+  String pesquisa = 'country=us';
 
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
 
-  void retornaLista() async {
-    final noticias = await controller.buscarNoticias();
+  void retornaTopNoticias() async {
+    final topNoticias = await controller.buscarNoticias(pesquisa, 'top-headlines?');
     setState(() {
+      mostrandoNoticiasEmAlta = true;
+      lista = topNoticias;
+    });
+  }
+
+  void retornaLista() async {
+    final noticias = await controller.buscarNoticias(pesquisa, 'everything?q=');
+    setState(() {
+      mostrandoNoticiasEmAlta = false;
       lista = noticias;
     });
+  }
+
+  void _togglePesquisa() async {
+    final estavaPesquisando = pesquisando;
+    setState(() {
+      pesquisando = !pesquisando;
+      if (!pesquisando) {
+        _searchController.clear();
+        pesquisa = 'country=us';
+        mostrandoNoticiasEmAlta = true;
+      }
+    });
+    if (estavaPesquisando && !pesquisando) {
+      retornaTopNoticias();
+    }
   }
 
   List<Noticia> lista = [];
@@ -37,7 +64,7 @@ class _ListaPageState extends State<ListaPage> {
   @override
   void initState() {
     super.initState();
-    retornaLista();
+    retornaTopNoticias();
   }
 
   @override
@@ -46,47 +73,20 @@ class _ListaPageState extends State<ListaPage> {
       appBar: AppBar(
         title: pesquisando
             ? TextField(
-          controller: _searchController,
-          autofocus: true,
-          decoration: const InputDecoration(
-            hintText: 'Pesquisar...',
-            border: InputBorder.none,
-          ),
-          onSubmitted: (texto) async {
-            search = texto.trim();
-
-            // Atualiza instância da API com novo search
-            getIt.unregister<Api>();
-            getIt.registerLazySingleton<Api>(() => Api(
-              search: search,
-              baseUrl: baseUrl(search),
-            ));
-
-            // Recria controller dependente da Api
-            getIt.unregister<NoticiaController>();
-            getIt.registerLazySingleton<NoticiaController>(
-                    () => NoticiaController(api: getIt<Api>()));
-
-            // Busca a nova lista com o termo digitado
-            final noticias = await getIt<NoticiaController>().buscarNoticias();
-            setState(() {
-              lista = noticias;
-              pesquisando = false;
-              _searchController.clear();
-            });
-          },
-        )
+                controller: _searchController,
+                autofocus: true,
+                decoration: InputDecoration(hintText: 'Pesquisar...', border: InputBorder.none),
+                onSubmitted: (texto) async {
+                  pesquisa = texto.trim();
+                  retornaLista();
+                },
+              )
             : const Text('Now News!'),
         actions: [
           IconButton(
             icon: Icon(pesquisando ? Icons.close : Icons.search),
             onPressed: () {
-              setState(() {
-                pesquisando = !pesquisando;
-                if (!pesquisando) {
-                  _searchController.clear();
-                }
-              });
+              _togglePesquisa();
             },
           ),
         ],
@@ -95,6 +95,10 @@ class _ListaPageState extends State<ListaPage> {
       body: SafeArea(
         child: Column(
           children: [
+            Text(
+              mostrandoNoticiasEmAlta ? 'Top notícias em alta!' : 'Notícias para: $pesquisa',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
             Expanded(
               child: ListView.builder(
                 itemCount: lista.length,

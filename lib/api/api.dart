@@ -4,15 +4,13 @@ import 'package:ap2/model/noticia.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../chave_api.dart';
+
 class Api {
-  final String baseUrl;
+  Api();
 
-  final String search;
-
-  Api({required this.search, required this.baseUrl});
-
-  Future<List<Noticia>> getNoticias() async {
-    final response = await http.get(Uri.parse(baseUrl));
+  Future<List<Noticia>> getNoticias(String search, String endpoint, {bool top = false}) async {
+    final response = await http.get(Uri.parse('https://newsapi.org/v2/$endpoint$search&apiKey=$apiKey'));
 
     try {
       if (response.statusCode == 200) {

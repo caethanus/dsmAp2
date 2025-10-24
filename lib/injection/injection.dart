@@ -5,12 +5,6 @@ import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
 
-// valor dinâmico que você vai setar antes de chamar noticiaModule()
-String search = '';
-
-String baseUrl(String s) =>
-    'https://newsapi.org/v2/everything?q=$s&apiKey=$apiKey';
-
 void mainModule() {
   noticiaModule();
 }
@@ -25,11 +19,7 @@ void noticiaModule() {
   }
 
   // Registra de novo com o valor atualizado
-  getIt.registerLazySingleton<Api>(
-        () => Api(search: search, baseUrl: baseUrl(search)),
-  );
+  getIt.registerLazySingleton<Api>(() => Api());
 
-  getIt.registerLazySingleton<NoticiaController>(
-        () => NoticiaController(api: getIt<Api>()),
-  );
+  getIt.registerLazySingleton<NoticiaController>(() => NoticiaController(api: getIt<Api>()));
 }
