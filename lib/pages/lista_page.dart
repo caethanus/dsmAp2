@@ -29,7 +29,10 @@ class _ListaPageState extends State<ListaPage> {
   }
 
   void retornaTopNoticias() async {
-    final topNoticias = await controller.buscarNoticias(pesquisa, 'top-headlines?');
+    final topNoticias = await controller.buscarNoticias(
+      pesquisa,
+      'top-headlines?',
+    );
     setState(() {
       mostrandoNoticiasEmAlta = true;
       lista = topNoticias;
@@ -69,22 +72,68 @@ class _ListaPageState extends State<ListaPage> {
 
   @override
   Widget build(BuildContext context) {
+    const appBarItemColor = Colors.white;
     return Scaffold(
+      backgroundColor: Color(0xffb6bffd),
       appBar: AppBar(
+        backgroundColor: Colors.indigoAccent,
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () async {
+            return showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('Logout'),
+                content: Text('Deseja realmente sair?'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text('Não'),
+                  ),
+                  TextButton(
+                    onPressed: () =>
+                        Navigator.pushReplacementNamed(context, '/login'),
+                    child: Text('Sim'),
+                  ),
+                ],
+              ),
+            );
+          },
+          icon: Icon(Icons.logout),
+          color: appBarItemColor,
+        ),
         title: pesquisando
             ? TextField(
+                style: TextStyle(color: appBarItemColor),
                 controller: _searchController,
                 autofocus: true,
-                decoration: InputDecoration(hintText: 'Pesquisar...', border: InputBorder.none),
+                decoration: InputDecoration(
+                  hintText: 'Pesquisar...',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  hintStyle: TextStyle(color: appBarItemColor),
+                  fillColor: Colors.indigo,
+                  filled: true,
+                ),
                 onSubmitted: (texto) async {
                   pesquisa = texto.trim();
                   retornaLista();
                 },
               )
-            : const Text('Now News!'),
+            : const Text(
+                'Now News!',
+                style: TextStyle(
+                  color: appBarItemColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
         actions: [
           IconButton(
-            icon: Icon(pesquisando ? Icons.close : Icons.search),
+            icon: Icon(
+              pesquisando ? Icons.close : Icons.search,
+              color: appBarItemColor,
+            ),
             onPressed: () {
               _togglePesquisa();
             },
@@ -95,14 +144,22 @@ class _ListaPageState extends State<ListaPage> {
       body: SafeArea(
         child: Column(
           children: [
-            Text(
-              mostrandoNoticiasEmAlta ? 'Top notícias em alta!' : 'Notícias para: $pesquisa',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Text(
+                mostrandoNoticiasEmAlta
+                    ? 'Top notícias em alta!'
+                    : 'Notícias para: $pesquisa',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              ),
             ),
             Expanded(
               child: ListView.builder(
                 itemCount: lista.length,
-                itemBuilder: (context, index) => Column(children: [NoticiaCard(noticia: lista[index])]),
+                itemBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: NoticiaCard(noticia: lista[index]),
+                ),
               ),
             ),
           ],

@@ -46,6 +46,9 @@ class NoticiaCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: Colors.indigoAccent,
+                      ),
                       onPressed: () {
                         _launchUrl();
                       },
