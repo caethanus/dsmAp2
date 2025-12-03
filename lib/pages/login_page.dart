@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Text('Login'),
                     ),
                     TextButton(
-                      onPressed: () => Navigator.pushReplacementNamed(context, cadastroRoute),
+                      onPressed: () => Navigator.pushNamed(context, cadastroRoute),
                       child: Text("Não tem uma conta? Cadastre-se!"),
                     ),
                   ],
