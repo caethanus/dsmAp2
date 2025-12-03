@@ -9,7 +9,6 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
@@ -20,11 +19,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Image.asset(
-                'assets/images/logo_now_news.png',
-                width: 160,
-                height: 160,
-              ),
+              Image.asset('assets/images/logo_now_news.png', width: 160, height: 160),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -59,13 +54,16 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     FilledButton(
                       onPressed: () => Navigator.pushReplacementNamed(context, listaNoticiaRoute),
-                      child: Text('Login'),
                       style: FilledButton.styleFrom(
                         backgroundColor: Colors.indigoAccent,
-                        minimumSize: Size(double.infinity, 68)
+                        minimumSize: Size(double.infinity, 68),
                       ),
+                      child: Text('Login'),
                     ),
-                    TextButton(onPressed: () => Navigator.pushNamed(context, cadastroRoute), child: Text("Não tem uma conta? Cadastre-se!"))
+                    TextButton(
+                      onPressed: () => Navigator.pushReplacementNamed(context, cadastroRoute),
+                      child: Text("Não tem uma conta? Cadastre-se!"),
+                    ),
                   ],
                 ),
               ),
