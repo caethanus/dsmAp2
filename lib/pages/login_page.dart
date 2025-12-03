@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   spacing: 16,
                   children: [
-                    TextFormField(
+                    TextField(
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         hintStyle: TextStyle(color: Colors.white),
@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
                         filled: true,
                       ),
                     ),
-                    TextFormField(
+                    TextField(
                       obscureText: true,
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(

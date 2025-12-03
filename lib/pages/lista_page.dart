@@ -29,10 +29,7 @@ class _ListaPageState extends State<ListaPage> {
   }
 
   void retornaTopNoticias() async {
-    final topNoticias = await controller.buscarNoticias(
-      pesquisa,
-      'top-headlines?',
-    );
+    final topNoticias = await controller.buscarNoticias(pesquisa, 'top-headlines?');
     setState(() {
       mostrandoNoticiasEmAlta = true;
       lista = topNoticias;
@@ -78,30 +75,6 @@ class _ListaPageState extends State<ListaPage> {
       appBar: AppBar(
         backgroundColor: Colors.indigoAccent,
         centerTitle: true,
-        leading: IconButton(
-          onPressed: () async {
-            return showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: Text('Logout'),
-                content: Text('Deseja realmente sair?'),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text('Não'),
-                  ),
-                  TextButton(
-                    onPressed: () =>
-                        Navigator.pushReplacementNamed(context, '/login'),
-                    child: Text('Sim'),
-                  ),
-                ],
-              ),
-            );
-          },
-          icon: Icon(Icons.logout),
-          color: appBarItemColor,
-        ),
         title: pesquisando
             ? TextField(
                 style: TextStyle(color: appBarItemColor),
@@ -109,9 +82,7 @@ class _ListaPageState extends State<ListaPage> {
                 autofocus: true,
                 decoration: InputDecoration(
                   hintText: 'Pesquisar...',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
                   hintStyle: TextStyle(color: appBarItemColor),
                   fillColor: Colors.indigo,
                   filled: true,
@@ -121,19 +92,38 @@ class _ListaPageState extends State<ListaPage> {
                   retornaLista();
                 },
               )
-            : const Text(
-                'Now News!',
-                style: TextStyle(
-                  color: appBarItemColor,
-                  fontWeight: FontWeight.bold,
-                ),
+            : Row(
+                children: [
+                  IconButton(
+                    onPressed: () async {
+                      return showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Logout'),
+                          content: Text('Deseja realmente sair?'),
+                          actions: [
+                            TextButton(onPressed: () => Navigator.pop(context), child: Text('Não')),
+                            TextButton(
+                              onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
+                              child: Text('Sim'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    icon: Icon(Icons.logout),
+                    color: appBarItemColor,
+                  ),
+                  SizedBox(width: 90,),
+                  Text(
+                    'Now News!',
+                    style: TextStyle(color: appBarItemColor, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
         actions: [
           IconButton(
-            icon: Icon(
-              pesquisando ? Icons.close : Icons.search,
-              color: appBarItemColor,
-            ),
+            icon: Icon(pesquisando ? Icons.close : Icons.search, color: appBarItemColor),
             onPressed: () {
               _togglePesquisa();
             },
@@ -147,9 +137,7 @@ class _ListaPageState extends State<ListaPage> {
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Text(
-                mostrandoNoticiasEmAlta
-                    ? 'Top notícias em alta!'
-                    : 'Notícias para: $pesquisa',
+                mostrandoNoticiasEmAlta ? 'Top notícias em alta!' : 'Notícias para: $pesquisa',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
               ),
             ),
