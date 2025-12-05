@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1086243382048",
+    "project_id": "now-news-fdebb",
+    "storage_bucket": "now-news-fdebb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086243382048:android:d1dbf0fef66f3baaa06d45",
+        "android_client_info": {
+          "package_name": "com.example.ap2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBI76xMYcVhGN4iRO_8YiEa8VlO5SfU1bc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

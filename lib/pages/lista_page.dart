@@ -5,6 +5,7 @@ import 'package:ap2/widgets/noticia_card.dart';
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';
+import '../services/firebase/auth/firebaseAuth.dart';
 
 class ListaPage extends StatefulWidget {
   const ListaPage({super.key});
@@ -18,6 +19,7 @@ class _ListaPageState extends State<ListaPage> {
   bool mostrandoNoticiasEmAlta = true;
 
   final TextEditingController _searchController = TextEditingController();
+  final FirebaseAuthService _auth = FirebaseAuthService();
 
   final controller = getIt.get<NoticiaController>();
 
@@ -75,6 +77,31 @@ class _ListaPageState extends State<ListaPage> {
       appBar: AppBar(
         backgroundColor: Colors.indigoAccent,
         centerTitle: true,
+        leading: pesquisando
+          ? SizedBox() :
+          IconButton(
+            onPressed: () async {
+              return showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text('Logout'),
+                  content: Text('Deseja realmente sair?'),
+                  actions: [
+                    TextButton(onPressed: () => Navigator.pop(context), child: Text('Não')),
+                    TextButton(
+                      onPressed: (){
+                        _auth.logout();
+                        Navigator.pushReplacementNamed(context, '/login');
+                      },
+                      child: Text('Sim'),
+                    ),
+                  ],
+                ),
+              );
+            },
+            icon: Icon(Icons.logout),
+            color: appBarItemColor,
+          ),
         title: pesquisando
             ? TextField(
                 style: TextStyle(color: appBarItemColor),
@@ -91,36 +118,12 @@ class _ListaPageState extends State<ListaPage> {
                   pesquisa = texto.trim();
                   retornaLista();
                 },
-              )
-            : Row(
-                children: [
-                  IconButton(
-                    onPressed: () async {
-                      return showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text('Logout'),
-                          content: Text('Deseja realmente sair?'),
-                          actions: [
-                            TextButton(onPressed: () => Navigator.pop(context), child: Text('Não')),
-                            TextButton(
-                              onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
-                              child: Text('Sim'),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    icon: Icon(Icons.logout),
-                    color: appBarItemColor,
-                  ),
-                  SizedBox(width: 90,),
+              ) :
                   Text(
                     'Now News!',
                     style: TextStyle(color: appBarItemColor, fontWeight: FontWeight.bold),
                   ),
-                ],
-              ),
+
         actions: [
           IconButton(
             icon: Icon(pesquisando ? Icons.close : Icons.search, color: appBarItemColor),

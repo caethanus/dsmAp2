@@ -1,8 +1,15 @@
 import 'package:ap2/routes/routes.dart';
 import 'package:flutter/material.dart';
 
+import '../services/firebase/auth/firebaseAuth.dart';
+
 class CadastroPage extends StatefulWidget {
-  const CadastroPage({super.key});
+  CadastroPage({super.key});
+
+  final FirebaseAuthService _auth = FirebaseAuthService();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
 
   @override
   State<CadastroPage> createState() => _CadastroPageState();
@@ -25,6 +32,7 @@ class _CadastroPageState extends State<CadastroPage> {
                   spacing: 8,
                   children: [
                     TextField(
+                      controller: widget._fullNameController,
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         hintStyle: TextStyle(color: Colors.white),
@@ -34,6 +42,7 @@ class _CadastroPageState extends State<CadastroPage> {
                       ),
                     ),
                     TextField(
+                      controller: widget._emailController,
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         hintStyle: TextStyle(color: Colors.white),
@@ -43,6 +52,7 @@ class _CadastroPageState extends State<CadastroPage> {
                       ),
                     ),
                     TextField(
+                      controller: widget._passwordController,
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         hintStyle: TextStyle(color: Colors.white),
@@ -63,6 +73,7 @@ class _CadastroPageState extends State<CadastroPage> {
                       onPressed: () {
                         //colocar função de criação de usuário do firebase, por ora, vou deixar apenas uma navegação
                         // para lembrarmos do fluxo
+                        widget._auth.register(widget._fullNameController.text, widget._emailController.text, widget._passwordController.text);
                         Navigator.pushReplacementNamed(context, listaNoticiaRoute);
                       },
                       style: FilledButton.styleFrom(
