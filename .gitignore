@@ -32,7 +32,6 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
-lib/firebase_options.dart
 # Symbolication related
 app.*.symbols
 
@@ -47,3 +46,18 @@ app.*.map.json
 firebase.json
 google-services.json
 chave_api.dart
+
+# Ignorar arquivos de configuração/senhas dentro de lib
+# ignora arquivos nomeados explicitamente
+lib/firebase_options.dart
+lib/chave_api.dart
+lib/config_local.dart
+lib/secrets.dart
+
+# ignora qualquer arquivo com sufixo .secret.dart ou .local.dart
+lib/**/*.secret.dart
+lib/**/*.local.dart
+
+# ignora pastas privadas dentro de lib
+lib/private/
+lib/.local/
