@@ -46,3 +46,5 @@ app.*.map.json
 
 firebase.json
 google-services.json
+chave_api.dart
+firebase_options.dart
